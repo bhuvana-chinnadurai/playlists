@@ -5,16 +5,14 @@ This is a micro service , written in scala for creating/displaying playlists wit
 - `quill` to write scala code to interact with postgres. https://getquill.io/#
 - `postgres` as a database using docker https://hub.docker.com/_/postgres
 
-# How to run
+## How to run the service
 
-sbt run
+Run the service `playlists` by executing  `docker-compose up --force-recreate`
 
-# Installation
+This will start the service running at `localhost:8080` 
 
-docker run -d --name postgres-server -p 5432:5432 -e "POSTGRES_PASSWORD=password" postgres
-docker exec -it 149b6545485e /bin/sh
 
-# Playlists
+## Playlists
 
 ## Available Endpoints
 The end points are:
