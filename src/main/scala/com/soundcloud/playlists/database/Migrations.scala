@@ -9,7 +9,7 @@ object Migrations {
   def migrate[F[_] :Sync](): fs2.Stream[F, MigrateResult] =  {
     import org.flywaydb.core.Flyway
     val flyway: Flyway = Flyway.configure.dataSource(
-      "jdbc:postgresql://localhost:5432/playlists",
+      "jdbc:postgresql://postgres:5432/playlists",
       "postgres",
       "password"
     ).load
