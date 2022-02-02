@@ -6,13 +6,15 @@ import org.flywaydb.core.api.output.MigrateResult
 
 object Migrations {
 
-  def migrate[F[_] :Sync](): fs2.Stream[F, MigrateResult] =  {
+  def migrate[F[_]: Sync](): fs2.Stream[F, MigrateResult] = {
     import org.flywaydb.core.Flyway
-    val flyway: Flyway = Flyway.configure.dataSource(
-      "jdbc:postgresql://postgres:5432/playlists",
-      "postgres",
-      "password"
-    ).load
+    val flyway: Flyway = Flyway.configure
+      .dataSource(
+        "jdbc:postgresql://postgres:5432/playlists",
+        "postgres",
+        "password"
+      )
+      .load
 
     fs2.Stream.eval {
       try {

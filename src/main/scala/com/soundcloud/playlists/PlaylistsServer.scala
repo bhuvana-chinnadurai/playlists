@@ -13,31 +13,22 @@ object PlaylistsServer {
 
   def stream[F[_]: Async]: Stream[F, Nothing] = {
 
-    val  httpApp = (
+    val httpApp = (
       PlaylistsRoutes.playlistRoutes[F](new PlaylistRepository[F]())
-      ).orNotFound
+    ).orNotFound
 
     val finalHttpApp = Logger.httpApp(true, true)(httpApp)
 
     for {
-      _<-Migrations.migrate[F]()
-     // client <- Stream.resource(EmberClientBuilder.default[F].build)
-
-      // Combine Service Routes into an HttpApp.
-      // Can also be done via a Router if you
-      // want to extract a segments not checked
-      // in the underlying routes.
-
-
-      // With Middlewares in place
-
+      _ <- Migrations.migrate[F]()
       exitCode <- Stream.resource(
-        EmberServerBuilder.default[F]
+        EmberServerBuilder
+          .default[F]
           .withHost(ipv4"0.0.0.0")
           .withPort(port"8080")
           .withHttpApp(finalHttpApp)
           .build >>
-        Resource.eval(Async[F].never)
+          Resource.eval(Async[F].never)
       )
     } yield exitCode
   }.drain
